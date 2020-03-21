@@ -8,7 +8,7 @@ import models.cnn as cnn
 
 
 if __name__ == '__main__':
-    loadData.generate_dataset()
+    loadData.generate_dataset(224)
     data = config.data
     label = config.label
 
@@ -24,10 +24,10 @@ if __name__ == '__main__':
     )
 
     # basic cnn
-    model = cnn.getmodel(width=data.shape[1], height=data.shape[2], channel=3, classes=2)
+    # model = cnn.getmodel(width=data.shape[1], height=data.shape[2], channel=3, classes=2)
 
-    # googleNet
-    # model = googlenet.getmodel(width=data.shape[1], height=data.shape[2], channel=3, classes=2)
+    # googleNet input 224*224*3
+    model = googlenet.getmodel(width=data.shape[1], height=data.shape[2], channel=3, classes=2)
 
     # AlexNet
     # model =
