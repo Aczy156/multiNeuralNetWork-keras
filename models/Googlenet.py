@@ -1,4 +1,4 @@
-from keras.layers import Input, Conv2D, MaxPooling2D, AveragePooling2D, Dense, Dropout, BatchNormalization, Concatenate,Flatten
+from keras.layers import Input, Conv2D, MaxPooling2D, AveragePooling2D, Dense, Dropout, BatchNormalization, Concatenate
 from keras.models import Model
 from keras import backend as K
 
@@ -38,6 +38,9 @@ def Inception(x, _filter):
 def getmodel(width, height, channel, classes):
     input_shape = Input(shape=(width, height, channel))
     # K.set_image_data_format('channels_first')
+    # googlenet 不用顺序化的模型，通过api函数实现
+    # vggnet input 为224
+    # 什么时候写strides是需要用元组形式，什么时候不需要元组形式
     x = _Conv2D(input_shape, 64, (7, 7), strides=(2, 2), padding='same')
     # MaxPooling2D()
     x = MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='same')(x)
@@ -56,9 +59,8 @@ def getmodel(width, height, channel, classes):
     x = Inception(x, 256)
     x = AveragePooling2D(pool_size=(7, 7), strides=(7, 7), padding='same')(x)
     x = Dropout(0.5)(x)
-    x = Flatten()(x)
     x = Dense(1000, activation='relu')(x)
-    x = Dense(2, activation='softmax')(x)
+    x = Dense(1000, activation='softmax')(x)
     model = Model(input_shape, x, name='inception')
     model.summary()
     # model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
@@ -66,4 +68,3 @@ def getmodel(width, height, channel, classes):
 
 # if __name__ == '__main__':
 #     getmodel(224, 224, 3, 2)
-
